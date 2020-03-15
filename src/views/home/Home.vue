@@ -3,87 +3,39 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banners="banners"/>
-    <home-recommend-view :recommends="recommends"/>
-    <home-feature-view/>
-    <tab-control class="tab-control"
-                 :titles="['流行','新款','精选']"
-                 @tabClick="tabClick"/>
-    <goods-list :goods="showGoods"/>
-    <ul>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-      <li>列表</li>
-    </ul>
+
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+      :pull-up-load="true"
+    >
+      <home-swiper :banners="banners"/>
+      <home-recommend-view :recommends="recommends"/>
+      <home-feature-view/>
+      <tab-control class="tab-control"
+                   :titles="['流行','新款','精选']"
+                   @tabClick="tabClick"/>
+      <goods-list :goods="showGoods"/>
+    </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
 <script>
+  /** 工具方法 **/
+  import {debounce} from 'common/utils'
   /** 当前组件的子组件 **/
   import HomeSwiper from './childComps/HomeSwiper'
   import HomeRecommendView from './childComps/HomeRecommendView'
   import HomeFeatureView from './childComps/HomeFeatureView'
   /** 公共组件 **/
   import NavBar from 'components/common/navbar/NavBar'
+  import Scroll from 'components/common/scroll/Scroll'
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
+  import BackTop from 'components/content/backTop/BackTop'
   /** 组件的请求 **/
   import {
     getHomeMultidata,
@@ -93,9 +45,11 @@
   export default {
     name: "Home",
     components: {
+      BackTop,
       NavBar,
       TabControl,
       GoodsList,
+      Scroll,
 
       HomeSwiper,
       HomeRecommendView,
@@ -110,7 +64,8 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []}
         },
-        currentType: 'pop'
+        currentType: 'pop',
+        isShowBackTop: false
       }
     },
     computed: {
@@ -125,6 +80,14 @@
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
+    },
+    mounted() {
+      // 调用防抖动函数
+      const refresh = debounce(this.$refs.scroll.refresh, 502);
+      // 监听图片加载完成
+      this.$bus.$on('itemImageLoad', () => {
+        refresh()
+      })
     },
     methods: {
       /**
@@ -141,6 +104,12 @@
           case 2:
             this.currentType = 'sell'
         }
+      },
+      backClick() {
+        this.$refs.scroll.scrollTo(0, 0, 500)
+      },
+      contentScroll(position) {
+        this.isShowBackTop = (-position.y) > 1000
       },
 
       /**
@@ -168,6 +137,8 @@
 
   #home {
     padding-top: 44px;
+    height: 100vh;
+    position: relative;
   }
 
   .home-nav {
@@ -186,4 +157,19 @@
     top: 44px;
     z-index: 9;
   }
+
+  .content {
+    overflow: hidden;
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
+  }
+
+  /* .content {
+     height: calc(100% - 93px);
+     overflow: hidden;
+     margin-top: 51px;
+   }*/
 </style>
