@@ -21,6 +21,10 @@
         type: Number,
         default: 0
       },
+      pullUpLoad: {
+        type: Boolean,
+        default: false
+      }
     },
     mounted() {
       // 1、创建 BScroll 对象
@@ -31,20 +35,34 @@
         pullUpLoad: this.pullUpLoad
       })
       // 2、监听滚动的位置
-      this.scroll.on('scroll', (position) => {
-        this.$emit('scroll', position)
-      })
+      if (this.probeType === 2 || this.probeType === 3) {
+        this.scroll.on('scroll', (position) => {
+          this.$emit('scroll', position)
+        })
+      }
 
+      // 3、监听scroll滚动到底部
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+          this.$emit('pullingUp')
+        })
+      }
     },
     methods: {
+      // 移动到某一位置的方法
       scrollTo(x, y, time = 300) {
-        this.scroll && this.scroll.scrollTo() && this.scroll.scrollTo(x, y, time)
+        this.scroll && this.scroll.scrollTo(x, y, time)
       },
+      // 上拉加载更多的完成方法
       finishPullUp() {
-        this.scroll && this.scroll.finishPullUp() && this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp()
       },
+      // 重新计算页面 content 的长度
       refresh() {
-        this.scroll && this.scroll.refresh() && this.scroll.refresh()
+        this.scroll && this.scroll.refresh()
+      },
+      getScrollY() {
+        return this.scroll ? this.scroll.y : 0
       }
     }
   }
