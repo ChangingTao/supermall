@@ -31,6 +31,7 @@
 
 <script>
   /** 工具方法 **/
+  import {itemListenerMixin} from "common/mixin";
   import {debounce} from 'common/utils'
   /** 当前组件的子组件 **/
   import HomeSwiper from './childComps/HomeSwiper'
@@ -74,20 +75,24 @@
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
-        saveY:0
+        saveY:0,
       }
     },
+    mixins: [itemListenerMixin],
     computed: {
       showGoods() {
         return this.goods[this.currentType].list;
       }
     },
     activated(){
-      this.$refs.scroll.scrollTo(0,this.saveY, 0)
       this.$refs.scroll.refresh()
+      this.$refs.scroll.scrollTo(0,this.saveY, 0)
     },
     deactivated(){
+      // 1、保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
+      // 2、取消全局事件的监听
+      this.$bus.$off('itemImgLoad', this.itemImageListener)
     },
     created() {
       // 1、请求多个数据
@@ -96,15 +101,6 @@
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
-    },
-    mounted() {
-      // 调用防抖动函数
-      const refresh = debounce(this.$refs.scroll.refresh, 2);
-      // 监听图片加载完成
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      })
-
     },
     methods: {
       /**

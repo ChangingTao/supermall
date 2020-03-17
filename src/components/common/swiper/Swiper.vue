@@ -50,7 +50,7 @@
 
         // 2.开启定时器
         this.startTimer();
-      }, 100)
+      }, 300)
     },
     methods: {
 		  /**
@@ -58,7 +58,7 @@
        */
       startTimer: function () {
 		    this.playTimer = window.setInterval(() => {
-		      this.currentIndex++;
+          this.currentIndex++;
 		      this.scrollContent(-this.currentIndex * this.totalWidth);
         }, this.interval)
       },
@@ -70,7 +70,7 @@
        * 滚动到正确的位置
        */
       scrollContent: function (currentPosition) {
-        // 0.设置正在滚动
+      // 0.设置正在滚动
         this.scrolling = true;
 
         // 1.开始滚动动画

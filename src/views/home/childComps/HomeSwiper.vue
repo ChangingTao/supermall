@@ -20,9 +20,7 @@
     props: {
       banners: {
         type: Array,
-        default() {
-          return []
-        }
+
       }
     },
     data() {
