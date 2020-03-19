@@ -31,8 +31,9 @@
 
 <script>
   /** 工具方法 **/
-  import {itemListenerMixin} from "common/mixin";
+  import {itemListenerMixin, backTopMixin} from "common/mixin";
   import {debounce} from 'common/utils'
+  import {BACK_POSITION} from "common/const";
   /** 当前组件的子组件 **/
   import HomeSwiper from './childComps/HomeSwiper'
   import HomeRecommendView from './childComps/HomeRecommendView'
@@ -72,13 +73,12 @@
           'sell': {page: 0, list: []}
         },
         currentType: 'pop',
-        isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY:0,
       }
     },
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin, backTopMixin],
     computed: {
       showGoods() {
         return this.goods[this.currentType].list;
@@ -120,12 +120,9 @@
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },
-      backClick() {
-        this.$refs.scroll.scrollTo(0, 0, 500)
-      },
       contentScroll(position) {
         // 1、判断 BackTop 是否显示
-        this.isShowBackTop = (-position.y) > 1000
+        this.backTopBtn(position)
         // 2、决定tabControl是否吸顶(position: fixed)
         this.isTabFixed = (-position.y) > this.tabOffsetTop
       },

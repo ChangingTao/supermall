@@ -95,9 +95,9 @@
     position: relative;
     top: 2px;
   }
-
   .info-service-item span {
     font-size: 13px;
     color: #333;
   }
+
 </style>
