@@ -24,11 +24,10 @@
 <script>
   export default {
     name: "DetailButtonBar",
-    methods:{
-      addToCart(){
+    methods: {
+      addToCart() {
         this.$emit('addCart')
       }
-
     }
   }
 </script>
@@ -52,7 +51,7 @@
     display: flex;
   }
 
-  .bar-item>div {
+  .bar-item > div {
     flex: 1;
   }
 
@@ -69,11 +68,11 @@
   }
 
   .bar-left .service {
-    background-position:0 -54px;
+    background-position: 0 -54px;
   }
 
   .bar-left .shop {
-    background-position:0 -98px;
+    background-position: 0 -98px;
   }
 
   .bar-right {

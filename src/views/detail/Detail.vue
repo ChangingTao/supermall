@@ -2,9 +2,6 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
     <scroll class="content" ref="scroll" @scroll="contentScroll" :probe-type="3">
-      <ul>
-        <li v-for="item in $store.state.cartList">{{item}}</li>
-      </ul>
       <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
@@ -22,7 +19,8 @@
   import {debounce} from 'common/utils'
   import {itemListenerMixin, backTopMixin} from "common/mixin";
   import {BACK_POSITION} from "common/const";
-  import GoodsList from 'components/content/goods/GoodsList'
+
+  import {mapActions} from 'vuex'
 
   import DetailNavBar from './childComps/DetailNavBar'
   import DetailSwiper from './childComps/DetailSwiper'
@@ -35,6 +33,7 @@
   import BackTop from 'components/content/backTop/BackTop'
   import {getDetail, getRecommend, Goods, Shop, GoodsParam} from 'network/detail'
 
+  import GoodsList from 'components/content/goods/GoodsList'
   import Scroll from 'components/common/scroll/Scroll'
 
   export default {
@@ -50,7 +49,8 @@
       DetailBottomBar,
       BackTop,
       Scroll,
-      GoodsList
+      GoodsList,
+
     },
     data() {
       return {
@@ -64,7 +64,7 @@
         recommends: [],
         themeTopYs: [],
         getThemeTopY: null,
-        currentIndex: 0
+        currentIndex: 0,
       }
     },
     mixins: [itemListenerMixin, backTopMixin],
@@ -121,6 +121,7 @@
 
     },
     methods: {
+      ...mapActions(['addCart']),
       imageLoad() {
         this.newRefresh()
 
@@ -177,8 +178,11 @@
         product.price = this.goods.realPrice
         product.iid = this.iid
 
-        // 2.将商品放到购物车中 (Vuex)
-        this.$store.dispatch('addCart', product)
+        // 2.将商品放到购物车中 (Vuex), 如果添加商品成功则返回一个内容
+        this.addCart(product).then(res => {
+          this.$toast.show(res, 2000)
+        })
+
       }
     }
   }
