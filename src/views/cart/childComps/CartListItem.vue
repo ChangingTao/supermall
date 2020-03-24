@@ -11,7 +11,11 @@
       <div class="item-desc">商品描述: {{itemInfo.desc}}</div>
       <div class="info-bottom">
         <div class="item-price left">¥{{itemInfo.price}}</div>
-        <div class="item-count right">x{{itemInfo.count}}</div>
+        <div class="item-count right">
+          <button @click="increaseBtn">+</button>
+          {{itemInfo.count}}
+          <button @click="decreaseBtn">-</button>
+        </div>
       </div>
     </div>
   </div>
@@ -36,7 +40,13 @@
     methods: {
       checkClick() {
         this.itemInfo.checked = !this.itemInfo.checked
-      }
+      },
+      increaseBtn() {
+        this.itemInfo.count ++
+      },
+      decreaseBtn() {
+        this.itemInfo.count --
+      },
     }
   }
 </script>

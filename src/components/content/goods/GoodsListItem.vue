@@ -1,9 +1,9 @@
 <template>
-  <div class="goods-item" @click="itemClick">
+  <div class="goods-item" @click="itemClick" :style="isHome ? 'width: 48%' : ''">
     <img v-lazy="showImage" @load="imageLoad">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
-      <span class="price">{{goodsItem.price}}</span>
+      <span class="price">￥{{goodsItem.price}}</span>
       <span class="collect">{{goodsItem.cfav}}</span>
     </div>
   </div>
@@ -15,14 +15,16 @@
     props: {
       goodsItem: {
         type: Object,
-        default() {
-          return {}
-        }
+        default: {}
+      },
+      isHome:{
+        type: Boolean,
+        default: true
       }
     },
     computed: {
       showImage() {
-        return this.goodsItem.image || this.goodsItem.show.img
+        return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
       }
     },
     methods: {
@@ -45,7 +47,6 @@
   .goods-item {
     padding-bottom: 40px;
     position: relative;
-    width: 48%;
   }
 
   .goods-item img {
@@ -88,5 +89,10 @@
     width: 14px;
     height: 14px;
     background: url("~assets/img/common/collect.svg") 0 0/14px 14px;
+  }
+
+  /** 自定义属性，如果是home页面，则通过 :home="true" 即可将图片宽度添加进去 **/
+  .home{
+    width: 48%;
   }
 </style>

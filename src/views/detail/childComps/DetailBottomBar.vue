@@ -78,15 +78,24 @@
   .bar-right {
     font-size: 15px;
     color: #fff;
-    line-height: 58px;
+    line-height: 50px;
   }
 
   .bar-right .cart {
     background-color: #ffe817;
-    color: #333;
+    color: #eeeeee;
+    font-weight: 700;
+    margin: 5px 0;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
   }
 
   .bar-right .buy {
     background-color: #f69;
+    color: #eeeeee;
+    font-weight: 700;
+    margin: 5px 0;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
   }
 </style>

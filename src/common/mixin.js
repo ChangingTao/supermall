@@ -1,6 +1,7 @@
 import {debounce} from "./utils";
 import BackTop from 'components/content/backTop/BackTop'
 import {BACK_POSITION} from "common/const";
+import {NEW, POP, SELL} from "common/const";
 
 export const itemListenerMixin = {
   data() {
@@ -27,15 +28,37 @@ export const backTopMixin = {
       isShowBackTop: false
     }
   },
-  components:{
+  components: {
     BackTop
   },
   methods: {
-    backClick(){
+    backClick() {
       this.$refs.scroll.scrollTo(0, 0, 500)
     },
-    backTopBtn(position){
+    backTopBtn(position) {
       this.isShowBackTop = (-position.y) > BACK_POSITION
     }
   },
+}
+export const tabControlMixin = {
+  data: function () {
+    return {
+      currentType: POP
+    }
+  },
+  methods: {
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = POP
+          break
+        case 1:
+          this.currentType = NEW
+          break
+        case 2:
+          this.currentType = SELL
+          break
+      }
+    }
+  }
 }

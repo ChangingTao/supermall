@@ -31,7 +31,7 @@
 
 <script>
   /** 工具方法 **/
-  import {itemListenerMixin, backTopMixin} from "common/mixin";
+  import {itemListenerMixin, backTopMixin, tabControlMixin} from "common/mixin";
   import {debounce} from 'common/utils'
   import {BACK_POSITION} from "common/const";
   /** 当前组件的子组件 **/
@@ -72,23 +72,22 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []}
         },
-        currentType: 'pop',
         tabOffsetTop: 0,
         isTabFixed: false,
-        saveY:0,
+        saveY: 0,
       }
     },
-    mixins: [itemListenerMixin, backTopMixin],
+    mixins: [itemListenerMixin, backTopMixin, tabControlMixin],
     computed: {
       showGoods() {
         return this.goods[this.currentType].list;
       }
     },
-    activated(){
+    activated() {
       this.$refs.scroll.refresh()
-      this.$refs.scroll.scrollTo(0,this.saveY, 0)
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
     },
-    deactivated(){
+    deactivated() {
       // 1、保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
       // 2、取消全局事件的监听
@@ -102,24 +101,20 @@
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
     },
+    /* 因为tabControl的点击事件使用mixin将点击事件的方法导出,没法通过点击事件来让两个tabControl选项相同
+    ,所以这里监听 currentType 的变化来让tabControl1和tabControl2选择的内容相等 */
+    watch: {
+      currentType: function (e) {
+        const currentType = ['pop', 'new', 'sell']
+        let index = currentType.indexOf(e)
+        this.$refs.tabControl1.currentIndex = index;
+        this.$refs.tabControl2.currentIndex = index;
+      }
+    },
     methods: {
       /**
        * 事件监听相关的方法
        */
-      tabClick(index) {
-        switch (index) {
-          case 0:
-            this.currentType = 'pop'
-            break
-          case 1:
-            this.currentType = 'new'
-            break
-          case 2:
-            this.currentType = 'sell'
-        }
-        this.$refs.tabControl1.currentIndex = index;
-        this.$refs.tabControl2.currentIndex = index;
-      },
       contentScroll(position) {
         // 1、判断 BackTop 是否显示
         this.backTopBtn(position)

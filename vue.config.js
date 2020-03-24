@@ -1,4 +1,7 @@
 module.exports = {
+  devServer: {
+    port: 800,     // 端口号
+  },
   configureWebpack:{
     resolve: {
       extensions: [],
@@ -9,8 +12,6 @@ module.exports = {
         'components': '@/components',
         'network': '@/network',
         'views': '@/views',
-
-
       }
     }
   }
