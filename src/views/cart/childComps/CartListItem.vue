@@ -42,10 +42,13 @@
         this.itemInfo.checked = !this.itemInfo.checked
       },
       increaseBtn() {
-        this.itemInfo.count ++
+        this.itemInfo.count++
+        if(this.itemInfo.checked === false) this.itemInfo.checked = true
       },
       decreaseBtn() {
-        this.itemInfo.count --
+        if(this.itemInfo.count <=0) return this.$toast.show('商品数不可为负')
+         --this.itemInfo.count
+        if (this.itemInfo.count === 0) return this.itemInfo.checked = false
       },
     }
   }

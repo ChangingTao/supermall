@@ -5,7 +5,7 @@
       <span>全选</span>
     </div>
     <div class="price">
-      合计：{{totalPrice}}
+        合计：￥<span style="color: red">{{totalPrice}}</span>
     </div>
     <div class="calculate" @click="calcClick">
       去计算 ({{checkedLength}})
@@ -22,7 +22,7 @@
     components: {CheckButton},
     computed: {
       totalPrice() {
-        return '￥' + this.cartList.filter(item => {
+        return this.cartList.filter(item => {
           return item.checked
         }).reduce((previousValue, currentValue) => {
           return previousValue + currentValue.price * currentValue.count

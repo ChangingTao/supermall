@@ -76,14 +76,13 @@
   }
 
   .bar-right {
-    font-size: 15px;
-    color: #fff;
+    font-size: 12px;
+    color: #404040;
     line-height: 50px;
   }
 
   .bar-right .cart {
     background-color: #ffe817;
-    color: #eeeeee;
     font-weight: 700;
     margin: 5px 0;
     border-top-left-radius: 50px;
@@ -92,7 +91,6 @@
 
   .bar-right .buy {
     background-color: #f69;
-    color: #eeeeee;
     font-weight: 700;
     margin: 5px 0;
     border-top-right-radius: 50px;
